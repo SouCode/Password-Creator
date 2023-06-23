@@ -1,37 +1,64 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Enter password length: ");
         Scanner input = new Scanner(System.in);
+        int length = input.nextInt(); // Length of the password
 
-        int digits = input.nextInt(); // How long the password should be generated
+        // Define character pools for different types of characters
+        String uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+        String numberChars = "0123456789";
+        String specialChars = "/$@?";
 
-        String lowerCase = "qwertyuiopasdfghjklzxcvbnm"; // Lowercase letters
-        String upperCase = "QWERTYUUIOPASDFGHJKLZXCVBNM"; // Uppercase letters
-        String password = ""; // Variable to store the generated password
+        StringBuilder password = new StringBuilder();
+        Random random = new Random();
 
-        for (int i = 0; i < digits; i++) {
-            int rand = (int) (3 * Math.random()); // Generate a random number between 0 and 2
+        // Generate at least one character from each character pool
+        password.append(getRandomChar(uppercaseChars, random));
+        password.append(getRandomChar(lowercaseChars, random));
+        password.append(getRandomChar(numberChars, random));
+        password.append(getRandomChar(specialChars, random));
 
-            switch (rand) {
-                case 0:
-                    // If rand is 0, append a random digit (0-9) to the password
-                    password += String.valueOf((int) (0 * Math.random()));
-                    break;
-                case 1:
-                    // If rand is 1, append a random lowercase letter to the password
-                    rand = (int) (lowerCase.length() * Math.random());
-                    password += String.valueOf(lowerCase.charAt(rand));
-                    break;
-
-                case 2:
-                    // If rand is 2, append a random uppercase letter to the password
-                    rand = (int) (upperCase.length() * Math.random());
-                    password += String.valueOf(upperCase.charAt(rand));
-                    break;
-            }
+        // Generate remaining characters based on the given length
+        int remainingLength = length - 4;
+        for (int i = 0; i < remainingLength; i++) {
+            // Select a random character pool
+            String pool = getRandomCharPool(uppercaseChars, lowercaseChars, numberChars, specialChars);
+            // Append a random character from the selected pool to the password
+            password.append(getRandomChar(pool, random));
         }
-        System.out.println(password); // Print the generated password
+
+        // Shuffle the password characters
+        String shuffledPassword = shuffleString(password.toString(), random);
+
+        System.out.println(shuffledPassword);
+    }
+
+    /* Generates a random character from the given character pool.*/
+    private static char getRandomChar(String charPool, Random random) {
+        int randomIndex = random.nextInt(charPool.length());
+        return charPool.charAt(randomIndex);
+    }
+
+    /* Selects a random character pool from the given array of character pools. */
+    private static String getRandomCharPool(String... charPools) {
+        Random random = new Random();
+        int randomIndex = random.nextInt(charPools.length);
+        return charPools[randomIndex];
+    }
+
+    /* Shuffles the characters of the given input string using a Fisher-Yates algorithm. */
+    private static String shuffleString(String input, Random random) {
+        char[] characters = input.toCharArray();
+        for (int i = 0; i < characters.length; i++) {
+            int randomIndex = random.nextInt(characters.length);
+            char temp = characters[i];
+            characters[i] = characters[randomIndex];
+            characters[randomIndex] = temp;
+        }
+        return new String(characters);
     }
 }
