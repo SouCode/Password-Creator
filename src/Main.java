@@ -7,11 +7,17 @@ public class Main {
         Scanner input = new Scanner(System.in);
         int length = input.nextInt(); // Length of the password
 
+        // Check if the specified length is less than 8, and set it to 8 if necessary
+        if (length < 8) {
+            length = 8;
+            System.out.println("Password length scaled up to 8 characters for security.");
+        }
+
         // Define character pools for different types of characters
-        String uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-        String numberChars = "0123456789";
-        String specialChars = "/$@?";
+        String uppercaseChars = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+        String lowercaseChars = "abcdefghijkmnpqrstuvwxyz";
+        String numberChars = "123456789";
+        String specialChars = "!#$@?";
 
         StringBuilder password = new StringBuilder();
         Random random = new Random();
