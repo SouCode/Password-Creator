@@ -1,3 +1,5 @@
+import java.awt.*;
+import java.awt.datatransfer.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -41,9 +43,17 @@ public class Main {
         String shuffledPassword = shuffleString(password.toString(), random);
 
         System.out.println(shuffledPassword);
+
+        // Prompt the user to copy the password to the clipboard
+        System.out.print("Do you want to copy the password to the clipboard? (Y/N): ");
+        String copyChoice = input.next();
+        if (copyChoice.equalsIgnoreCase("Y")) {
+            copyToClipboard(shuffledPassword);
+            System.out.println("Password copied to clipboard.");
+        }
     }
 
-    /* Generates a random character from the given character pool.*/
+    /* Generates a random character from the given character pool. */
     private static char getRandomChar(String charPool, Random random) {
         int randomIndex = random.nextInt(charPool.length());
         return charPool.charAt(randomIndex);
@@ -66,5 +76,12 @@ public class Main {
             characters[randomIndex] = temp;
         }
         return new String(characters);
+    }
+
+    /* Copies the given string to the clipboard. */
+    private static void copyToClipboard(String text) {
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, null);
     }
 }
